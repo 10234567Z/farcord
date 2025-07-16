@@ -11,6 +11,7 @@ contract TokenGateManager {
         // --> Set owner/nft owner/min balance requirement
 
     // Requesting to join/ verifies the requirement
+        // --> Charges 0.001 eth as gas fees for joining the channel
 
     // Kicking someone out
 
