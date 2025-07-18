@@ -58,7 +58,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         address owner;
         string name;
         string description;
-        bool isActive;
         Requirements requirements;
         uint256 creationTime;
     }
@@ -70,15 +69,14 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         TokenRequirement tokenRequirement;
         NFTRequirement nftRequirement;
         uint256 creationTime;
-        bool isActive;
     }
 
-    mapping(uint256 => Community) public communities;
-    mapping(uint256 => Channel) public channels;
-    mapping(uint256 => uint256[]) public communityChannels; // communityId to channelIds
-    mapping(address => uint256[]) public userCommunities; // user address to communityIds
-    uint256 public communityCount;
-    uint256 public channelCount;
+    mapping(uint256 => Community) private communities;
+    mapping(uint256 => Channel) private channels;
+    mapping(uint256 => uint256[]) private communityChannels; // communityId to channelIds
+    mapping(address => uint256[]) private userCommunities; // user address to communityIds
+    uint256 private communityCount;
+    uint256 private channelCount;
 
     // User Specific Definitions/Data
 
@@ -100,11 +98,9 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         if (bytes(community.description).length == 0) {
             revert TokenGateManager__InvalidDescription();
         }
-
-        community.isActive = false;
         community.creationTime = block.timestamp;
 
-        emit CommunityCreated(communityCount - 1, community.owner, community.name);
+        emit CommunityCreated(communityCount, community.owner, community.name);
         communities[communityCount] = community;
         communityCount++;
     }
@@ -119,9 +115,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         if (community.owner != msg.sender) {
             revert TokenGateManager__NotTheOwner();
         }
-        if (community.isActive == false) {
-            revert TokenGateManager__CommunityNotActive();
-        }
         if (bytes(channel.name).length == 0) {
             revert TokenGateManager__InvalidChannelName();
         }
@@ -129,9 +122,8 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
             revert TokenGateManager__InvalidChannelDescription();
         }
 
-        channel.isActive = false;
         channel.creationTime = block.timestamp;
-        emit CommunityCreated(communityCount - 1, community.owner, community.name);
+        emit ChannelCreated(channelCount, channel.communityId, channel.name);
         channels[channelCount] = channel;
         communityChannels[channel.communityId].push(channelCount);
         channelCount++;
@@ -147,9 +139,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
             revert TokenGateManager__InvalidCommunityName();
         }
         Community memory community = communities[communityId];
-        if (!community.isActive) {
-            revert TokenGateManager__CommunityNotActive();
-        }
 
         // Check requirements
         if (!_checkRequirements(community.requirements, msg.sender)) {
@@ -170,9 +159,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         Community memory community = communities[communityId];
         if (community.owner != msg.sender) {
             revert TokenGateManager__NotTheOwner();
-        }
-        if (!community.isActive) {
-            revert TokenGateManager__CommunityNotActive();
         }
         if (bytes(community.name).length == 0) {
             revert TokenGateManager__InvalidCommunityName();
@@ -198,11 +184,8 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         for (uint256 i = 0; i < commChannels.length; i++) {
             uint256 channelId = commChannels[i];
             Channel memory channel = channels[channelId];
-            if (channel.isActive) {
-                channel.isActive = false;
-                channels[channelId] = channel;
-                emit ChannelDeleted();
-            }
+            channels[channelId] = channel;
+            emit ChannelDeleted();
         }
         delete communityChannels[communityId];
     }
@@ -215,9 +198,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         Community memory community = communities[communityId];
         if (community.owner != msg.sender) {
             revert TokenGateManager__NotTheOwner();
-        }
-        if (!community.isActive) {
-            revert TokenGateManager__CommunityNotActive();
         }
         if (bytes(community.name).length == 0) {
             revert TokenGateManager__InvalidCommunityName();
@@ -242,17 +222,12 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         if (community.owner != msg.sender) {
             revert TokenGateManager__NotTheOwner();
         }
-        if (!community.isActive) {
-            revert TokenGateManager__CommunityNotActive();
-        }
         if (bytes(community.name).length == 0) {
             revert TokenGateManager__InvalidCommunityName();
         }
         if (bytes(community.description).length == 0) {
             revert TokenGateManager__InvalidDescription();
         }
-        // Logic to remove the community can be added here
-        community.isActive = false;
         communities[communityId] = community;
         // Remove community from userCommunities mapping
         uint256[] storage userComms = userCommunities[msg.sender];
@@ -268,11 +243,8 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         for (uint256 i = 0; i < commChannels.length; i++) {
             uint256 channelId = commChannels[i];
             Channel memory channel = channels[channelId];
-            if (channel.isActive) {
-                channel.isActive = false;
-                channels[channelId] = channel;
-                emit ChannelDeleted();
-            }
+            channels[channelId] = channel;
+            emit ChannelDeleted();
         }
         delete communityChannels[communityId];
         emit CommunityDeleted();
@@ -292,9 +264,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         if (community.owner != msg.sender) {
             revert TokenGateManager__NotTheOwner();
         }
-        if (!channel.isActive) {
-            revert TokenGateManager__ChannelNotActive();
-        }
         if (bytes(channel.name).length == 0) {
             revert TokenGateManager__InvalidChannelName();
         }
@@ -302,7 +271,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
             revert TokenGateManager__InvalidChannelDescription();
         }
         // Logic to remove the channel from the community can be added here
-        channel.isActive = false;
         channels[channelId] = channel;
         // Remove channel from communityChannels mapping
         uint256[] storage commChannels = communityChannels[channel.communityId];
@@ -320,10 +288,6 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
     function leaveCommunity(uint256 communityId) public nonReentrant {
         if (communityId >= communityCount) {
             revert TokenGateManager__InvalidCommunityName();
-        }
-        Community memory community = communities[communityId];
-        if (!community.isActive) {
-            revert TokenGateManager__CommunityNotActive();
         }
 
         // Logic to remove user from the community can be added here
@@ -344,6 +308,10 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
             revert TokenGateManager__InsufficientPayment();
         }
         payable(owner()).transfer(balance);
+    }
+
+    function getOwner() external view returns (address) {
+        return owner();
     }
 
     /**
@@ -370,5 +338,43 @@ contract TokenGateManager is ReentrancyGuard, Ownable {
         }
 
         return true;
+    }
+
+    function getCommunity(uint256 communityId) external view returns (Community memory) {
+        if (communityId >= communityCount) {
+            revert TokenGateManager__InvalidCommunityName();
+        }
+        return communities[communityId];
+    }
+
+    function getChannel(uint256 channelId) external view returns (Channel memory) {
+        if (channelId >= channelCount) {
+            revert TokenGateManager__InvalidChannelName();
+        }
+        return channels[channelId];
+    }
+
+    function getUserCommunities(address user) external view returns (uint256[] memory) {
+        return userCommunities[user];
+    }
+
+    function getCommunityChannels(uint256 communityId) external view returns (uint256[] memory) {
+        return communityChannels[communityId];
+    }
+
+    function getCommunityCount() external view returns (uint256) {
+        return communityCount;
+    }
+
+    function getChannelCount() external view returns (uint256) {
+        return channelCount;
+    }
+
+    function getUserCommunityCount(address user) external view returns (uint256) {
+        return userCommunities[user].length;
+    }
+    function getUserCommunity(uint256 index) external view returns (uint256) {
+        require(index < userCommunities[msg.sender].length, "Index out of bounds");
+        return userCommunities[msg.sender][index];
     }
 }
