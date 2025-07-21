@@ -2,26 +2,13 @@
 pragma solidity ^0.8.0;
 
 import {ECDSA} from "@oppenzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {IUserRegistry} from "./interfaces/IUserRegistry.sol";
 
-contract UserRegistery {
+contract UserRegistery is IUserRegistry {
     using ECDSA for bytes32;
-
-    struct User {
-        string delegatedPublicKey; // Ed25519 public key for app signing
-        uint256 nonce; // Prevent replay attacks
-        bool isActive; // Can revoke delegation
-        uint256 registeredAt; // Timestamp
-    }
 
     mapping(address => User) public users;
     mapping(string => address) public publicKeyToUser;
-
-    event UserRegistered(address indexed user, string publicKey);
-    event DelegationRevoked(address indexed user);
-
-    error UserRegistery__AlreadyRegistered();
-    error UserRegistery__InvalidSignature();
-    error UserRegistery__NotRegistered();
 
     /**
      * @dev Register user and delegate signing authority to app-generated key
@@ -43,6 +30,7 @@ contract UserRegistery {
             )
         );
 
+        // Verify signature
         address signer = message.recover(signature);
         if (signer != msg.sender) revert UserRegistery__InvalidSignature();
 
@@ -119,5 +107,12 @@ contract UserRegistery {
      */
     function getUserFromKey(string calldata publicKey) external view returns (address) {
         return publicKeyToUser[publicKey];
+    }
+
+    /**
+     * @dev Preview what delegated key would be generated for a user (for testing)
+     */
+    function previewDelegatedKey(address user) external view returns (string memory) {
+        return _generateUniquePublicKey(user);
     }
 }
