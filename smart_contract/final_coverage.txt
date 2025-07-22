@@ -1,0 +1,95 @@
+Compiling 47 files with Solc 0.8.28
+Solc 0.8.28 finished in 3.08s
+Compiler run successful!
+Analysing contracts...
+Running tests...
+
+Ran 71 tests for test/TokenGateManagerTest.t.sol:TokenGateManagerTest
+[PASS] testArrayEdgeCases() (gas: 259145)
+[PASS] testChannelDeletionBranches() (gas: 544553)
+[PASS] testChannelRequirements() (gas: 382646)
+[PASS] testCheckRequirementsEdgeCases() (gas: 243586)
+[PASS] testComplexScenarioWithMultipleCommunities() (gas: 455861)
+[PASS] testContractBalanceAccumulation() (gas: 459768)
+[PASS] testCreateChannelFailsInvalidChannelName() (gas: 206840)
+[PASS] testCreateChannelFailsInvalidCommunityId() (gas: 24559)
+[PASS] testCreateChannelFailsInvalidDescription() (gas: 206789)
+[PASS] testCreateChannelFailsNotOwner() (gas: 208720)
+[PASS] testCreateChannelSuccess() (gas: 349297)
+[PASS] testCreateCommunityFailsEmptyDescription() (gas: 32082)
+[PASS] testCreateCommunityFailsEmptyName() (gas: 31980)
+[PASS] testCreateCommunityFailsInsufficientPayment() (gas: 32109)
+[PASS] testCreateCommunityFailsZeroAddress() (gas: 31943)
+[PASS] testCreateCommunitySuccess() (gas: 214133)
+[PASS] testDeleteChannelFailsEmptyChannelName() (gas: 326726)
+[PASS] testDeleteChannelFailsEmptyDescription() (gas: 326703)
+[PASS] testDeleteChannelFailsInvalidChannelId() (gas: 18871)
+[PASS] testDeleteChannelFailsInvalidCommunityId() (gas: 343908)
+[PASS] testDeleteChannelFailsNotOwner() (gas: 345414)
+[PASS] testDeleteChannelSuccess() (gas: 327333)
+[PASS] testDeleteChannelValidationBranches() (gas: 326702)
+[PASS] testDeleteCommunityFailsEmptyDescription() (gas: 207669)
+[PASS] testDeleteCommunityFailsEmptyName() (gas: 209022)
+[PASS] testDeleteCommunityFailsNotOwner() (gas: 203189)
+[PASS] testDeleteCommunitySuccess() (gas: 208322)
+[PASS] testDeleteCommunityValidationBranches() (gas: 263249)
+[PASS] testDeleteCommunityWithChannels() (gas: 450579)
+[PASS] testForLoopBranches() (gas: 254592)
+[PASS] testGetChannelFailsInvalidId() (gas: 349630)
+[PASS] testGetCommunityChannels() (gas: 337848)
+[PASS] testGetCommunityFailsInvalidId() (gas: 210982)
+[PASS] testGetOwner() (gas: 13845)
+[PASS] testGetUserCommunity() (gas: 242792)
+[PASS] testGetUserCommunityCount() (gas: 244768)
+[PASS] testGetUserCommunityFailsOutOfBounds() (gas: 242154)
+[PASS] testJoinCommunityFailsInsufficientPayment() (gas: 207236)
+[PASS] testJoinCommunityFailsInvalidCommunityId() (gas: 25621)
+[PASS] testJoinCommunityFailsNotEnoughTokens() (gas: 216068)
+[PASS] testJoinCommunityFailsWrongNFT() (gas: 216237)
+[PASS] testJoinCommunitySuccess() (gas: 246966)
+[PASS] testJoinCommunityWithBothTokenAndNFTRequirements() (gas: 356799)
+[PASS] testJoinCommunityWithNFTRequirement() (gas: 243632)
+[PASS] testJoinCommunityWithNoRequirements() (gas: 217131)
+[PASS] testKickUserFailsEmptyDescription() (gas: 234611)
+[PASS] testKickUserFailsEmptyName() (gas: 234588)
+[PASS] testKickUserFailsInvalidCommunityId() (gas: 21351)
+[PASS] testKickUserFailsNotOwner() (gas: 205531)
+[PASS] testKickUserFailsZeroAddress() (gas: 201541)
+[PASS] testKickUserSuccess() (gas: 241659)
+[PASS] testKickUserValidationBranches() (gas: 234665)
+[PASS] testKickUserWithChannels() (gas: 359148)
+[PASS] testLeaveCommunityFailsInvalidCommunityId() (gas: 18938)
+[PASS] testLeaveCommunitySuccess() (gas: 231730)
+[PASS] testLeaveCommunityWhenNotMember() (gas: 203322)
+[PASS] testMultipleUsersInSameCommunity() (gas: 308497)
+[PASS] testNFTOwnershipValidation() (gas: 323513)
+[PASS] testRequirementsValidationBranches() (gas: 534354)
+[PASS] testTokenGateManagerDeployment() (gas: 23315)
+[PASS] testTokenRequirementEdgeCases() (gas: 287778)
+[PASS] testUpdateCommunityRequirementsFailsEmptyName() (gas: 218820)
+[PASS] testUpdateCommunityRequirementsFailsInvalidCommunityId() (gas: 23886)
+[PASS] testUpdateCommunityRequirementsFailsNotOwner() (gas: 205744)
+[PASS] testUpdateCommunityRequirementsSuccess() (gas: 266366)
+[PASS] testUpdateCommunityValidationBranches() (gas: 218818)
+[PASS] testUserNotInCommunityBranches() (gas: 209118)
+[PASS] testWithdrawFeesFailsNoBalance() (gas: 18535)
+[PASS] testWithdrawFeesFailsNotOwner() (gas: 13549)
+[PASS] testWithdrawFeesSuccess() (gas: 258851)
+[PASS] testZeroAddressValidations() (gas: 31965)
+Suite result: ok. 71 passed; 0 failed; 0 skipped; finished in 9.40ms (68.25ms CPU time)
+
+Ran 1 test suite in 12.20ms (9.40ms CPU time): 71 tests passed, 0 failed, 0 skipped (71 total tests)
+
+╭-------------------------------------+------------------+------------------+----------------+-----------------╮
+| File                                | % Lines          | % Statements     | % Branches     | % Funcs         |
++==============================================================================================================+
+| script/TokenGateManagerScript.s.sol | 0.00% (0/4)      | 0.00% (0/3)      | 100.00% (0/0)  | 0.00% (0/1)     |
+|-------------------------------------+------------------+------------------+----------------+-----------------|
+| src/TokenGateManager.sol            | 94.15% (161/171) | 92.22% (154/167) | 76.74% (33/43) | 100.00% (19/19) |
+|-------------------------------------+------------------+------------------+----------------+-----------------|
+| test/mocks/MockERC721.sol           | 100.00% (2/2)    | 100.00% (1/1)    | 100.00% (0/0)  | 100.00% (1/1)   |
+|-------------------------------------+------------------+------------------+----------------+-----------------|
+| test/mocks/MockV3Aggregator.sol     | 0.00% (0/23)     | 0.00% (0/17)     | 100.00% (0/0)  | 0.00% (0/6)     |
+|-------------------------------------+------------------+------------------+----------------+-----------------|
+| Total                               | 81.50% (163/200) | 82.45% (155/188) | 76.74% (33/43) | 74.07% (20/27)  |
+╰-------------------------------------+------------------+------------------+----------------+-----------------╯
